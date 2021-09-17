@@ -42,17 +42,17 @@ app.get("/", (req, res) => {
   res.send(req.oidc.isAuthenticated() ? "Logged in" : "Logged out");
 });
 
-app.get("/sparko/card", requiresAuth(), (req, res) => {
+app.get("/sparko/card", (req, res) => {
   Cards.find((err, data) => {
     if (err) {
       res.status(500).send(err);
     } else {
       res.status(200).send(data);
     }
-  });
+  }).sort({name: -1}); // reverse order by name
 });
 
-app.post("/sparko/card", requiresAuth(), (req, res) => {
+app.post("/sparko/card", (req, res) => {
   const dbCard = req.body;
 
   Cards.create(dbCard, (err, data) => {
